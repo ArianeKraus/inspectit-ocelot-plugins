@@ -1,0 +1,5 @@
+inspectit:
+  plugins:
+    console-event:
+      enabled: true
+      service-name: console-Exporter
