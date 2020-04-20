@@ -1,0 +1,8 @@
+inspectit:
+  plugins:
+    elastic-event:
+      enabled: true
+      service-name: elastic-event-exporter
+      host: localhost
+      port: 9200
+      protocol: http
