@@ -1,7 +1,6 @@
 package rocks.inspectit.ocelot.plugin;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.NumberUtils;
 import org.springframework.util.StringUtils;
 import rocks.inspectit.ocelot.config.model.InspectitConfig;
 import rocks.inspectit.ocelot.exporter.ElasticEventExporter;
@@ -36,7 +35,8 @@ public class ElasticExporter implements ConfigurablePlugin<ElasticExporterSettin
                 && !StringUtils.isEmpty(settings.getServiceName())
                 && !StringUtils.isEmpty(settings.getHost())
                 && !StringUtils.isEmpty(settings.getProtocol())
-                && !StringUtils.isEmpty(settings.getPort());
+                && !StringUtils.isEmpty(settings.getPort())
+                && !StringUtils.isEmpty(settings.getIndex());
 
         //we force a restart if the access token has changed
         if (enabled && (!enable || !Objects.equals(activeSettings, settings))) {
@@ -64,7 +64,8 @@ public class ElasticExporter implements ConfigurablePlugin<ElasticExporterSettin
                     settings.getServiceName(),
                     settings.getHost(),
                     settings.getPort(),
-                    settings.getProtocol());
+                    settings.getProtocol(),
+                    settings.getIndex());
 
             enabled = true;
             activeSettings = settings;

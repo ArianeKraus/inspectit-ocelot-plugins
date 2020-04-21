@@ -1,7 +1,7 @@
 package rocks.inspectit.ocelot.exporter;
 
 import lombok.extern.slf4j.Slf4j;
-import rocks.inspectit.ocelot.sdk.events.EventExporter;
+import rocks.inspectit.ocelot.sdk.events.EventExporterService;
 
 import java.io.IOException;
 
@@ -12,16 +12,16 @@ public class ElasticEventExporter {
 
     private static String serviceName;
 
-    public static void createAndRegister(String name, String host, Integer port, String protocol) {
+    public static void createAndRegister(String name, String host, Integer port, String protocol, String index) {
         serviceName = name;
-        handler = new ElasticEventHandler();
+        handler = new ElasticEventHandler(index);
 
         handler.openClient(host, port, protocol);
-        EventExporter.registerHandler(serviceName, handler);
+        EventExporterService.registerHandler(serviceName, handler);
     }
 
     public static void unregister() throws IOException {
-        EventExporter.unregisterHandler(serviceName);
+        EventExporterService.unregisterHandler(serviceName);
         handler.closeClient();
     }
 }

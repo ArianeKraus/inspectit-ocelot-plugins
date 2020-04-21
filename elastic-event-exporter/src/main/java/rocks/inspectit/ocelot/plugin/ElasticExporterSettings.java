@@ -33,4 +33,9 @@ public class ElasticExporterSettings {
      * The protocol to use for the Elastic client. Http or Https.
      */
     private String protocol;
+
+    /**
+     * The Elasticsearch index under which the events will be stored. Used by Elasticsearch to categorize documents.
+     */
+    private String index;
 }

@@ -6,3 +6,4 @@ inspectit:
       host: localhost
       port: 9200
       protocol: http
+      index: inspectit-events
