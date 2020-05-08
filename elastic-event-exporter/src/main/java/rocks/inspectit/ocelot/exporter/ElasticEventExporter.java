@@ -14,7 +14,13 @@ public class ElasticEventExporter {
 
     public static void createAndRegister(String name, String host, Integer port, String protocol, String index) {
         serviceName = name;
-        handler = new ElasticEventHandler(index);
+        if(index.matches("[a-z\\d-]*")){
+            handler = new ElasticEventHandler(index);
+        } else {
+            log.info("The given index for exportering events towards Elastic does not match the requirements and " +
+                    "Default \"elastic-event-exporter\" is used. Only lowercase letters, numbers and - are allowed.");
+            handler = new ElasticEventHandler("elastic-event-exporter");
+        }
 
         handler.openClient(host, port, protocol);
         EventExporterService.registerHandler(serviceName, handler);

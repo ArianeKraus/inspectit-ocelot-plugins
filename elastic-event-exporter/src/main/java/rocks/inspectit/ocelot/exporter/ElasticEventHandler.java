@@ -38,7 +38,7 @@ public class ElasticEventHandler extends EventHandler {
                         new HttpHost(host, port, protocol)
                 )
         );
-        System.out.println("Elastic Event Exporter created an elastic client");
+        System.out.println("Elastic Event Exporter created an elastic client. Host:" + host + "/Port:" + port);
     }
 
     public void closeClient() throws IOException {
@@ -48,27 +48,37 @@ public class ElasticEventHandler extends EventHandler {
 
     @Override
     public void export(Collection<EventObject> events) {
-        BulkRequest request = new BulkRequest(elasticIndex);
+        try{
+            //TODO-THESIS ... more or less put a big try/catch block here. Threw an error and I dunno why.
+            BulkRequest request = new BulkRequest(elasticIndex);
 
-        for(EventObject event : events) {
-            Map<String, Object> jsonMap = new HashMap<>();
-            jsonMap.put("name", event.getName());
-            jsonMap.put("attributes", event.getAttributes());
+            for(EventObject event : events) {
+                Map<String, Object> jsonMap = new HashMap<>();
+                jsonMap.put("event-name", event.getName());
+                jsonMap.put("timestamp", event.getTimestamp());
+                jsonMap.put("attributes", event.getAttributes());
 
-            request.add(new IndexRequest().source(jsonMap, XContentType.JSON));
+                request.add(new IndexRequest().source(jsonMap, XContentType.JSON));
+            }
+
+            client.bulkAsync(request, RequestOptions.DEFAULT, new ActionListener<BulkResponse>() {
+                @Override
+                public void onResponse(BulkResponse bulkResponse) {
+                    if(bulkResponse.hasFailures()){
+                        log.info("Bulk request to elastic has failed: " + bulkResponse.buildFailureMessage());
+                    } else {
+                        log.info("Events successfuly sent to Elasticsearch");
+                    }
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    log.error("Events could not be sent to Elasticsearch", e);
+                }
+            });
+        } catch (Throwable t) {
+            log.error("Sending bulk request to Elasticsearch threw an exception", t);
         }
-
-        client.bulkAsync(request, RequestOptions.DEFAULT, new ActionListener<BulkResponse>() {
-            @Override
-            public void onResponse(BulkResponse bulkResponse) {
-                log.info("Events successfuly sent to Elasticsearch");
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                log.error("Events could not be sent to Elasticsearch");
-            }
-        });
 
         /**
          * Events should be sended towards elastic now

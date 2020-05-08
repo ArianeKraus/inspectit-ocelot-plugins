@@ -25,6 +25,7 @@ public class ElasticExporter implements ConfigurablePlugin<ElasticExporterSettin
 
     @Override
     public void start(InspectitConfig inspectitConfig, ElasticExporterSettings exporterSettings) {
+        System.out.println("Elastic event exporter is loaded and being started");
         update(inspectitConfig, exporterSettings);
     }
 
