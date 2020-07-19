@@ -1,0 +1,7 @@
+inspectit:
+  plugins:
+    logstash-event-export:
+      enabled: true
+      service-name: logstash-event-exporter
+      host: localhost
+      port: 8080
