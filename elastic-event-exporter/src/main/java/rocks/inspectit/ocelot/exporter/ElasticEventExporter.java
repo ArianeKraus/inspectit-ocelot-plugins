@@ -1,7 +1,7 @@
 package rocks.inspectit.ocelot.exporter;
 
 import lombok.extern.slf4j.Slf4j;
-import rocks.inspectit.ocelot.sdk.events.EventExporterService;
+import rocks.inspectit.ocelot.sdk.events.EventRegistryService;
 
 import java.io.IOException;
 
@@ -17,17 +17,18 @@ public class ElasticEventExporter {
         if(index.matches("[a-z\\d-]*")){
             handler = new ElasticEventHandler(index);
         } else {
+            String fallback = "elastic-event-exporter";
             log.info("The given index for exportering events towards Elastic does not match the requirements and " +
-                    "Default \"elastic-event-exporter\" is used. Only lowercase letters, numbers and - are allowed.");
-            handler = new ElasticEventHandler("elastic-event-exporter");
+                    "Default \"" + fallback + "\" is used. Only lowercase letters, numbers and - are allowed.");
+            handler = new ElasticEventHandler(fallback);
         }
 
         handler.openClient(host, port, protocol);
-        EventExporterService.registerHandler(serviceName, handler);
+        EventRegistryService.registerHandler(serviceName, handler);
     }
 
     public static void unregister() throws IOException {
-        EventExporterService.unregisterHandler(serviceName);
+        EventRegistryService.unregisterHandler(serviceName);
         handler.closeClient();
     }
 }

@@ -1,10 +1,8 @@
 package rocks.inspectit.ocelot.exporter;
 
-import rocks.inspectit.ocelot.sdk.events.EventHandler;
-
 import java.util.Collection;
 
-public class ConsoleEventHandler extends EventHandler {
+public class ConsoleEventHandler extends OcelotEventPluginHandler {
 
     @Override
     public void export(Collection<Object> events){

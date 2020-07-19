@@ -25,7 +25,6 @@ public class LogstashExporter implements ConfigurablePlugin<LogstashExporterSett
 
     @Override
     public void start(InspectitConfig inspectitConfig, LogstashExporterSettings exporterSettings) {
-        System.out.println("Logstash http event exporter is loaded and being started");
         update(inspectitConfig, exporterSettings);
     }
 

@@ -74,8 +74,6 @@ public class ElasticExporter implements ConfigurablePlugin<ElasticExporterSettin
             log.error("Error creating Elastic event exporter.", t);
             enabled = false;
         }
-//        enabled = true;
-//        activeSettings = settings;
     }
 
     /**

@@ -10,8 +10,8 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
-import rocks.inspectit.ocelot.sdk.events.EventHandler;
-import rocks.inspectit.ocelot.sdk.events.EventObject;
+import rocks.inspectit.ocelot.sdk.events.OcelotEventPluginHandler;
+import rocks.inspectit.ocelot.sdk.events.Event;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -19,10 +19,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Receives EventObjects from inspectIT ocelot and attempts to export them to elasticsearch.
+ * Receives EventObjects from inspectIT ocelot and attempts to export them to Elasticsearch.
  */
 @Slf4j
-public class ElasticEventHandler extends EventHandler {
+public class ElasticEventHandler extends OcelotEventPluginHandler {
 
     RestHighLevelClient client;
 
@@ -47,12 +47,11 @@ public class ElasticEventHandler extends EventHandler {
     }
 
     @Override
-    public void export(Collection<EventObject> events) {
+    public void export(Collection<Event> events) {
         try{
-            //TODO-THESIS ... more or less put a big try/catch block here. Threw an error and I dunno why.
             BulkRequest request = new BulkRequest(elasticIndex);
 
-            for(EventObject event : events) {
+            for(Event event : events) {
                 Map<String, Object> jsonMap = new HashMap<>();
                 jsonMap.put("event-name", event.getName());
                 jsonMap.put("timestamp", event.getTimestamp());
@@ -67,7 +66,7 @@ public class ElasticEventHandler extends EventHandler {
                     if(bulkResponse.hasFailures()){
                         log.info("Bulk request to elastic has failed: " + bulkResponse.buildFailureMessage());
                     } else {
-                        log.info("Events successfuly sent to Elasticsearch");
+                        // Do nothing
                     }
                 }
 
@@ -79,10 +78,5 @@ public class ElasticEventHandler extends EventHandler {
         } catch (Throwable t) {
             log.error("Sending bulk request to Elasticsearch threw an exception", t);
         }
-
-        /**
-         * Events should be sended towards elastic now
-         * TODO-THESIS-Find out what happens when wrong host/port is used to create elastic client and catch the error
-         */
     }
 }

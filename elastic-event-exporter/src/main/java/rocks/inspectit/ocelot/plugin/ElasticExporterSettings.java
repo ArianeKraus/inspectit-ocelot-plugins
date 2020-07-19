@@ -19,8 +19,7 @@ public class ElasticExporterSettings {
 
     /**
      * The hostname under which the elasticsearch node is running.
-     * TODO-THESIS: ? Currently only for one node a client can be configured. It should actually be multiple/all nodes?
-     * Not necessarily needed for the thesis.
+     * Currently only for one node a client can be configured.
      */
     private String host;
 
