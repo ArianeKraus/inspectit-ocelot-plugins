@@ -1,6 +1,6 @@
 package rocks.inspectit.ocelot.exporter;
 
-import rocks.inspectit.ocelot.sdk.events.EventExporter;
+import rocks.inspectit.ocelot.sdk.events.EventRegistryService;
 
 public class ConsoleEventExporter {
 
@@ -11,10 +11,10 @@ public class ConsoleEventExporter {
     public static void createAndRegister(String name) {
         serviceName = name;
         handler = new ConsoleEventHandler();
-        EventExporter.registerHandler(serviceName, handler);
+        EventRegistryService.registerHandler(serviceName, handler);
     }
 
     public static void unregister() {
-        EventExporter.unregisterHandler(serviceName);
+        EventRegistryService.unregisterHandler(serviceName);
     }
 }
