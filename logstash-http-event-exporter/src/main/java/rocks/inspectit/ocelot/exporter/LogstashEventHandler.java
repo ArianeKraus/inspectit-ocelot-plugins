@@ -41,15 +41,16 @@ public class LogstashEventHandler extends OcelotEventPluginHandler {
             DataOutputStream outstream = new DataOutputStream(connection.getOutputStream());
             ObjectMapper obj = new ObjectMapper();
 
-            for(Event e : events){
+//            for(Event e : events){
                 try {
-                    String eventAsJson = obj.writerWithDefaultPrettyPrinter().writeValueAsString(e);
+                    String eventAsJson = obj.writerWithDefaultPrettyPrinter().writeValueAsString(events);
+//                    String eventAsJson = obj.writerWithDefaultPrettyPrinter().writeValueAsString(e);
                     outstream.writeBytes(eventAsJson);
                     outstream.flush ();
                 } catch (Throwable t){
                     log.error("Converting Event Obj to JSON String failed. Dropped event.", t);
                 }
-            }
+//            }
             outstream.close();
 
 

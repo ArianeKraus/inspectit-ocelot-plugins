@@ -11,8 +11,4 @@ inspectit:
       service-name: (string, defaults to console-Exporter})
 ```
 
-After you have configured your stuff, e.g. by providing the following environment variable:
-```
-INSPECTIT_PLUGINS_CONSOLE-EVENT_ACCESSTOKEN=...
-```
-the exporter will be started.
+Exporter will start using the default configuration if nothing is provided.
